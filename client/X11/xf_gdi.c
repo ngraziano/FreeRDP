@@ -285,10 +285,15 @@ void xf_gdi_bitmap_update(rdpUpdate* update, BITMAP_UPDATE* bitmap)
 
 		XPutImage(xfi->display, xfi->primary, xfi->gc, image, 0, 0, x, y, w, h);
 
-		if (xfi->remote_app != True)
-			XCopyArea(xfi->display, xfi->primary, xfi->drawable, xfi->gc, x, y, w, h, x, y);
+		if (xfi->drawing == xfi->primary)
+		{
+			XSetFunction(xfi->display, xfi->gc, GXcopy);
 
-		gdi_InvalidateRegion(xfi->hdc, x, y, w, h);
+			if (xfi->remote_app != True)
+				XCopyArea(xfi->display, xfi->primary, xfi->drawable, xfi->gc, x, y, w, h, x, y);
+
+			gdi_InvalidateRegion(xfi->hdc, x, y, w, h);
+		}
 	}
 }
 
