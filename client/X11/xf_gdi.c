@@ -597,13 +597,13 @@ void xf_gdi_polyline(rdpUpdate* update, POLYLINE_ORDER* polyline)
 		}
 	}
 
-	XDrawLines(xfi->display, xfi->drawing, xfi->gc, points, polyline->numPoints, CoordModePrevious);
+	XDrawLines(xfi->display, xfi->drawing, xfi->gc, points, polyline->numPoints, CoordModeOrigin);
 
 	if (xfi->drawing == xfi->primary)
 	{
 		if (xfi->remote_app != True)
 		{
-			XDrawLines(xfi->display, xfi->drawable, xfi->gc, points, polyline->numPoints, CoordModePrevious);
+			XDrawLines(xfi->display, xfi->drawable, xfi->gc, points, polyline->numPoints, CoordModeOrigin);
 		}
 	}
 
