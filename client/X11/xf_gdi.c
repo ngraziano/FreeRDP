@@ -550,6 +550,7 @@ void xf_gdi_line_to(rdpUpdate* update, LINE_TO_ORDER* line_to)
 	{
 		if (xfi->remote_app != True)
 		{
+			int x,y;
 			int width, height;
 
 			XDrawLine(xfi->display, xfi->drawable, xfi->gc,
@@ -559,12 +560,22 @@ void xf_gdi_line_to(rdpUpdate* update, LINE_TO_ORDER* line_to)
 			height = line_to->nYStart - line_to->nYEnd;
 
 			if (width < 0)
+			{
+				x = line_to->nXStart;
 				width *= (-1);
+			}
+			else
+				x = line_to->nXEnd;
 
 			if (height < 0)
+			{
+				y = line_to->nYStart;
 				height *= (-1);
+			}
+			else
+				y = line_to->nYEnd;
 
-			gdi_InvalidateRegion(xfi->hdc, line_to->nXStart, line_to->nYStart, width, height);
+			gdi_InvalidateRegion(xfi->hdc, x, y, width, height);
 		}
 	}
 }
