@@ -475,6 +475,10 @@ void test_read_fast_index_order(void)
 	FAST_INDEX_ORDER fast_index;
 
 
+	fast_index.opLeft = 0;
+	fast_index.opRight = 0;
+	fast_index.opTop = 0;
+	fast_index.opBottom = 0;
 
 	s = stream_new(0);
 	s->p = s->data = fast_index_order;

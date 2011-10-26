@@ -2028,6 +2028,7 @@ void test_gdi_BitBlt_32bpp(void)
 	hdcDst = gdi_GetDC();
 	hdcDst->bytesPerPixel = bytesPerPixel;
 	hdcDst->bitsPerPixel = bitsPerPixel;
+	hdcDst->alpha=1;
 
 	hPalette = (rdpPalette*) gdi_GetSystemPalette();
 
@@ -2313,6 +2314,7 @@ void test_gdi_BitBlt_16bpp(void)
 	clrconv->alpha = 1;
 	clrconv->invert = 0;
 	clrconv->palette = hPalette;
+	clrconv->rgb555 = 0;
 
 	data = (uint8*) freerdp_image_convert((uint8*) bmp_SRC, NULL, 16, 16, 8, bitsPerPixel, clrconv);
 	hBmpSrc = gdi_CreateBitmap(16, 16, bitsPerPixel, data);
@@ -2970,6 +2972,7 @@ void test_gdi_InvalidateRegion(void)
 	gdi_SetNullClipRgn(hdc);
 
 	hdc->hwnd = (HGDI_WND) malloc(sizeof(GDI_WND));
+	hdc->hwnd->ninvalid = 1; //??
 	hdc->hwnd->invalid = gdi_CreateRectRgn(0, 0, 0, 0);
 	hdc->hwnd->invalid->null = 1;
 	invalid = hdc->hwnd->invalid;
