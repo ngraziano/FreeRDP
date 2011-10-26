@@ -1610,7 +1610,10 @@ void update_read_cache_brush_order(STREAM* s, CACHE_BRUSH_ORDER* cache_brush_ord
 	{
 		size = (cache_brush_order->bpp == 1) ? 8 : 8 * 8 * cache_brush_order->bpp;
 
-		cache_brush_order->data = (uint8*) xmalloc(size);
+		if(cache_brush_order->data == NULL)
+			cache_brush_order->data = (uint8*) xmalloc(size);
+		else
+			cache_brush_order->data = (uint8*) xrealloc(cache_brush_order->data, size);
 
 		if (cache_brush_order->bpp == 1)
 		{
