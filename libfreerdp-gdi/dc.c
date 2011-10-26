@@ -44,6 +44,7 @@ HGDI_DC gdi_GetDC()
 	hDC->clip = gdi_CreateRectRgn(0, 0, 0, 0);
 	hDC->clip->null = 1;
 	hDC->hwnd = NULL;
+	hDC->invert = 0;
 	return hDC;
 }
 
