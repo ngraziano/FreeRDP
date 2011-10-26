@@ -1418,12 +1418,12 @@ void test_gdi_GetPixel(void)
 	hBitmap = gdi_CreateCompatibleBitmap(hdc, width, height);
 	gdi_SelectObject(hdc, (HGDIOBJECT) hBitmap);
 
-	hBitmap->data[(64 * width * 4) + 32 * 4 + 0] = 0xDD;
-	hBitmap->data[(64 * width * 4) + 32 * 4 + 1] = 0xCC;
-	hBitmap->data[(64 * width * 4) + 32 * 4 + 2] = 0xBB;
-	hBitmap->data[(64 * width * 4) + 32 * 4 + 3] = 0xAA;
+	hBitmap->data[(63 * width * 4) + 32 * 4 + 0] = 0xDD;
+	hBitmap->data[(63 * width * 4) + 32 * 4 + 1] = 0xCC;
+	hBitmap->data[(63 * width * 4) + 32 * 4 + 2] = 0xBB;
+	hBitmap->data[(63 * width * 4) + 32 * 4 + 3] = 0xAA;
 
-	CU_ASSERT(gdi_GetPixel(hdc, 32, 64) == 0xAABBCCDD);
+	CU_ASSERT(gdi_GetPixel(hdc, 32, 63) == 0xAABBCCDD);
 
 	gdi_DeleteObject((HGDIOBJECT) hBitmap);
 	gdi_DeleteDC(hdc);
@@ -1443,8 +1443,8 @@ void test_gdi_SetPixel(void)
 	hBitmap = gdi_CreateCompatibleBitmap(hdc, width, height);
 	gdi_SelectObject(hdc, (HGDIOBJECT) hBitmap);
 
-	gdi_SetPixel(hdc, 32, 64, 0xAABBCCDD);
-	CU_ASSERT(gdi_GetPixel(hdc, 32, 64) == 0xAABBCCDD);
+	gdi_SetPixel(hdc, 32, 63, 0xAABBCCDD);
+	CU_ASSERT(gdi_GetPixel(hdc, 32, 63) == 0xAABBCCDD);
 
 	gdi_SetPixel(hdc, width - 1, height - 1, 0xAABBCCDD);
 	CU_ASSERT(gdi_GetPixel(hdc, width - 1, height - 1) == 0xAABBCCDD);
@@ -1877,7 +1877,7 @@ void test_gdi_Ellipse(void)
 
 	/* Test Case 1: (0,0) -> (16, 16) */
 	gdi_BitBlt(hdc, 0, 0, 16, 16, hdc, 0, 0, GDI_WHITENESS);
-	gdi_Ellipse(hdc, 0, 0, 16, 16);
+	gdi_Ellipse(hdc, 0, 0, 15, 15);
 	//assertBitmapsEqual(hBmp, hBmp_Ellipse_1, "Case 1");
 
 	gdi_DeleteObject((HGDIOBJECT)hBmp);
