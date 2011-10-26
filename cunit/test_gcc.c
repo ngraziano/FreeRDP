@@ -103,6 +103,8 @@ void test_gcc_write_conference_create_request(void)
 
 	gcc_write_conference_create_request(s, &user_data);
 	ASSERT_STREAM(s, (uint8*) gcc_conference_create_request_expected, sizeof(gcc_conference_create_request_expected));
+
+	stream_free(s);
 }
 
 uint8 gcc_client_core_data_expected[216] =
@@ -143,6 +145,9 @@ void test_gcc_write_client_core_data(void)
 	gcc_write_client_core_data(s, settings);
 
 	ASSERT_STREAM(s, (uint8*) gcc_client_core_data_expected, sizeof(gcc_client_core_data_expected));
+
+	settings_free(settings);
+	stream_free(s);
 }
 
 uint8 gcc_client_security_data_expected[12] =
@@ -166,6 +171,9 @@ void test_gcc_write_client_security_data(void)
 	gcc_write_client_security_data(s, settings);
 
 	ASSERT_STREAM(s, (uint8*) gcc_client_security_data_expected, sizeof(gcc_client_security_data_expected));
+
+	stream_free(s);
+	settings_free(settings);
 }
 
 uint8 gcc_client_cluster_data_expected[12] =
@@ -182,6 +190,9 @@ void test_gcc_write_client_cluster_data(void)
 	gcc_write_client_cluster_data(s, settings);
 
 	ASSERT_STREAM(s, (uint8*) gcc_client_cluster_data_expected, sizeof(gcc_client_cluster_data_expected));
+
+	stream_free(s);
+	settings_free(settings);
 }
 
 uint8 gcc_client_network_data_expected[44] =
@@ -212,4 +223,7 @@ void test_gcc_write_client_network_data(void)
 	gcc_write_client_network_data(s, settings);
 
 	ASSERT_STREAM(s, (uint8*) gcc_client_network_data_expected, sizeof(gcc_client_network_data_expected));
+
+	stream_free(s);
+	settings_free(settings);
 }

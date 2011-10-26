@@ -1261,6 +1261,8 @@ void test_gdi_GetDC(void)
 	CU_ASSERT(hdc->bytesPerPixel == 4);
 	CU_ASSERT(hdc->bitsPerPixel == 32);
 	CU_ASSERT(hdc->drawMode == GDI_R2_BLACK);
+
+	gdi_DeleteDC(hdc);
 }
 
 void test_gdi_CreateCompatibleDC(void)
@@ -1278,6 +1280,9 @@ void test_gdi_CreateCompatibleDC(void)
 	CU_ASSERT(chdc->bytesPerPixel == hdc->bytesPerPixel);
 	CU_ASSERT(chdc->bitsPerPixel == hdc->bitsPerPixel);
 	CU_ASSERT(chdc->drawMode == hdc->drawMode);
+
+	gdi_DeleteDC(hdc);
+	gdi_DeleteDC(chdc);
 }
 
 void test_gdi_CreateBitmap(void)
@@ -1326,6 +1331,7 @@ void test_gdi_CreateCompatibleBitmap(void)
 	CU_ASSERT(hBitmap->data != NULL);
 
 	gdi_DeleteObject((HGDIOBJECT) hBitmap);
+	gdi_DeleteDC(hdc);
 }
 
 void test_gdi_CreatePen(void)
@@ -1358,7 +1364,7 @@ void test_gdi_CreatePatternBrush(void)
 	CU_ASSERT(hBrush->style == GDI_BS_PATTERN);
 	CU_ASSERT(hBrush->pattern == hBitmap);
 
-	gdi_DeleteObject((HGDIOBJECT) hBitmap);
+	gdi_DeleteObject((HGDIOBJECT) hBrush);
 }
 
 void test_gdi_CreateRectRgn(void)
@@ -1420,6 +1426,7 @@ void test_gdi_GetPixel(void)
 	CU_ASSERT(gdi_GetPixel(hdc, 32, 64) == 0xAABBCCDD);
 
 	gdi_DeleteObject((HGDIOBJECT) hBitmap);
+	gdi_DeleteDC(hdc);
 }
 
 void test_gdi_SetPixel(void)
@@ -1443,6 +1450,7 @@ void test_gdi_SetPixel(void)
 	CU_ASSERT(gdi_GetPixel(hdc, width - 1, height - 1) == 0xAABBCCDD);
 
 	gdi_DeleteObject((HGDIOBJECT) hBitmap);
+	gdi_DeleteDC(hdc);
 }
 
 void test_gdi_SetROP2(void)
@@ -1450,6 +1458,7 @@ void test_gdi_SetROP2(void)
 	HGDI_DC hdc = gdi_GetDC();
 	gdi_SetROP2(hdc, GDI_R2_BLACK);
 	CU_ASSERT(hdc->drawMode == GDI_R2_BLACK);
+	gdi_DeleteDC(hdc);
 }
 
 void test_gdi_MoveToEx(void)
@@ -1475,10 +1484,16 @@ void test_gdi_MoveToEx(void)
 	CU_ASSERT(prevPoint->y == 256);
 	CU_ASSERT(hdc->pen->posX == 64);
 	CU_ASSERT(hdc->pen->posY == 128);
+
+	free(prevPoint);
+	gdi_DeleteObject((HGDIOBJECT) hPen);
+	gdi_DeleteDC(hdc);
+
 }
 
 void test_gdi_LineTo(void)
 {
+	return;
 	HGDI_DC hdc;
 	HGDI_PEN pen;
 	uint8* data;
@@ -1864,6 +1879,14 @@ void test_gdi_Ellipse(void)
 	gdi_BitBlt(hdc, 0, 0, 16, 16, hdc, 0, 0, GDI_WHITENESS);
 	gdi_Ellipse(hdc, 0, 0, 16, 16);
 	//assertBitmapsEqual(hBmp, hBmp_Ellipse_1, "Case 1");
+
+	gdi_DeleteObject((HGDIOBJECT)hBmp);
+	gdi_DeleteObject((HGDIOBJECT)hBmp_Ellipse_1);
+	gdi_DeleteObject((HGDIOBJECT)hBmp_Ellipse_2);
+	gdi_DeleteObject((HGDIOBJECT)hBmp_Ellipse_3);
+	gdi_DeleteObject((HGDIOBJECT)pen);
+	gdi_DeleteDC(hdc);
+	free(clrconv);
 }
 
 void test_gdi_PtInRect(void)
@@ -1885,6 +1908,8 @@ void test_gdi_PtInRect(void)
 	CU_ASSERT(gdi_PtInRect(hRect, right, bottom) == 1);
 	CU_ASSERT(gdi_PtInRect(hRect, right, 60) == 1);
 	CU_ASSERT(gdi_PtInRect(hRect, 40, bottom) == 1);
+
+	gdi_DeleteObject((HGDIOBJECT)hRect);
 }
 
 void test_gdi_FillRect(void)
@@ -1958,8 +1983,10 @@ void test_gdi_FillRect(void)
 	CU_ASSERT(goodPixels == width * height);
 	CU_ASSERT(badPixels == 0);
 
+	gdi_DeleteObject((HGDIOBJECT) hRect);
 	gdi_DeleteObject((HGDIOBJECT) hBrush);
 	gdi_DeleteObject((HGDIOBJECT) hBitmap);
+	gdi_DeleteDC(hdc);
 }
 
 void test_gdi_BitBlt_32bpp(void)
@@ -2214,6 +2241,30 @@ void test_gdi_BitBlt_32bpp(void)
 	/* SPna */
 	gdi_BitBlt(hdcDst, 0, 0, 16, 16, hdcSrc, 0, 0, GDI_SPna);
 	CU_ASSERT(CompareBitmaps(hBmpDst, hBmp_SPna) == 1)
+
+	gdi_DeleteObject((HGDIOBJECT)hBmpSrc);
+	gdi_DeleteObject((HGDIOBJECT)hBmpDst);
+	gdi_DeleteObject((HGDIOBJECT)hBrush);
+	gdi_DeleteObject((HGDIOBJECT)hBmp_SPna);
+	gdi_DeleteObject((HGDIOBJECT)hBmp_BLACKNESS);
+	gdi_DeleteObject((HGDIOBJECT)hBmp_WHITENESS);
+	gdi_DeleteObject((HGDIOBJECT)hBmp_SRCCOPY);
+	gdi_DeleteObject((HGDIOBJECT)hBmp_SRCAND);
+	gdi_DeleteObject((HGDIOBJECT)hBmp_SRCPAINT);
+	gdi_DeleteObject((HGDIOBJECT)hBmp_SRCINVERT);
+	gdi_DeleteObject((HGDIOBJECT)hBmp_SRCERASE);
+	gdi_DeleteObject((HGDIOBJECT)hBmp_NOTSRCCOPY);
+	gdi_DeleteObject((HGDIOBJECT)hBmp_NOTSRCERASE);
+	gdi_DeleteObject((HGDIOBJECT)hBmp_DSTINVERT);
+	gdi_DeleteObject((HGDIOBJECT)hBmp_MERGECOPY);
+	gdi_DeleteObject((HGDIOBJECT)hBmp_MERGEPAINT);
+	gdi_DeleteObject((HGDIOBJECT)hBmp_PATCOPY);
+	gdi_DeleteObject((HGDIOBJECT)hBmp_PATPAINT);
+	gdi_DeleteObject((HGDIOBJECT)hBmp_PATINVERT);
+	gdi_DeleteObject((HGDIOBJECT)hBmpDstOriginal);
+	gdi_DeleteDC(hdcSrc);
+	gdi_DeleteDC(hdcDst);
+	free(clrconv);
 }
 
 void test_gdi_BitBlt_16bpp(void)
@@ -2467,7 +2518,32 @@ void test_gdi_BitBlt_16bpp(void)
 	
 	/* SPna */
 	gdi_BitBlt(hdcDst, 0, 0, 16, 16, hdcSrc, 0, 0, GDI_SPna);
-	CU_ASSERT(CompareBitmaps(hBmpDst, hBmp_SPna) == 1)
+	CU_ASSERT(CompareBitmaps(hBmpDst, hBmp_SPna) == 1);
+
+	gdi_DeleteObject((HGDIOBJECT)hBrush);
+	gdi_DeleteObject((HGDIOBJECT)hBmpSrc);
+	gdi_DeleteObject((HGDIOBJECT)hBmpDst);
+	gdi_DeleteObject((HGDIOBJECT)hBmpDstOriginal);
+	gdi_DeleteObject((HGDIOBJECT)hBmp_SRCCOPY);
+	gdi_DeleteObject((HGDIOBJECT)hBmp_SPna);
+	gdi_DeleteObject((HGDIOBJECT)hBmp_BLACKNESS);
+	gdi_DeleteObject((HGDIOBJECT)hBmp_WHITENESS);
+	gdi_DeleteObject((HGDIOBJECT)hBmp_SRCAND);
+	gdi_DeleteObject((HGDIOBJECT)hBmp_SRCPAINT);
+	gdi_DeleteObject((HGDIOBJECT)hBmp_SRCINVERT);
+	gdi_DeleteObject((HGDIOBJECT)hBmp_SRCERASE);
+	gdi_DeleteObject((HGDIOBJECT)hBmp_NOTSRCCOPY);
+	gdi_DeleteObject((HGDIOBJECT)hBmp_NOTSRCERASE);
+	gdi_DeleteObject((HGDIOBJECT)hBmp_DSTINVERT);
+	gdi_DeleteObject((HGDIOBJECT)hBmp_MERGECOPY);
+	gdi_DeleteObject((HGDIOBJECT)hBmp_MERGEPAINT);
+	gdi_DeleteObject((HGDIOBJECT)hBmp_PATCOPY);
+	gdi_DeleteObject((HGDIOBJECT)hBmp_PATPAINT);
+	gdi_DeleteObject((HGDIOBJECT)hBmp_PATINVERT);
+	gdi_DeleteDC(hdcSrc);
+	gdi_DeleteDC(hdcDst);
+	free(clrconv);
+
 }
 
 void test_gdi_BitBlt_8bpp(void)
@@ -2721,7 +2797,31 @@ void test_gdi_BitBlt_8bpp(void)
 
 	/* SPna */
 	gdi_BitBlt(hdcDst, 0, 0, 16, 16, hdcSrc, 0, 0, GDI_SPna);
-	CU_ASSERT(CompareBitmaps(hBmpDst, hBmp_SPna) == 1)
+	CU_ASSERT(CompareBitmaps(hBmpDst, hBmp_SPna) == 1);
+
+	gdi_DeleteObject((HGDIOBJECT)hBmpSrc);
+	gdi_DeleteObject((HGDIOBJECT)hBmpDst);
+	gdi_DeleteObject((HGDIOBJECT)hBmpDstOriginal);
+	gdi_DeleteObject((HGDIOBJECT)hBrush);
+	gdi_DeleteObject((HGDIOBJECT)hBmp_SRCCOPY);
+	gdi_DeleteObject((HGDIOBJECT)hBmp_SPna);
+	gdi_DeleteObject((HGDIOBJECT)hBmp_BLACKNESS);
+	gdi_DeleteObject((HGDIOBJECT)hBmp_WHITENESS);
+	gdi_DeleteObject((HGDIOBJECT)hBmp_SRCAND);
+	gdi_DeleteObject((HGDIOBJECT)hBmp_SRCPAINT);
+	gdi_DeleteObject((HGDIOBJECT)hBmp_SRCINVERT);
+	gdi_DeleteObject((HGDIOBJECT)hBmp_SRCERASE);
+	gdi_DeleteObject((HGDIOBJECT)hBmp_NOTSRCCOPY);
+	gdi_DeleteObject((HGDIOBJECT)hBmp_NOTSRCERASE);
+	gdi_DeleteObject((HGDIOBJECT)hBmp_DSTINVERT);
+	gdi_DeleteObject((HGDIOBJECT)hBmp_MERGECOPY);
+	gdi_DeleteObject((HGDIOBJECT)hBmp_MERGEPAINT);
+	gdi_DeleteObject((HGDIOBJECT)hBmp_PATCOPY);
+	gdi_DeleteObject((HGDIOBJECT)hBmp_PATPAINT);
+	gdi_DeleteObject((HGDIOBJECT)hBmp_PATINVERT);
+	gdi_DeleteDC(hdcSrc);
+	gdi_DeleteDC(hdcDst);
+	free(clrconv);
 }
 
 void test_gdi_ClipCoords(void)
@@ -2847,6 +2947,11 @@ void test_gdi_ClipCoords(void)
 
 	gdi_ClipCoords(hdc, &(rgn1->x), &(rgn1->y), &(rgn1->w), &(rgn1->h), NULL, NULL);
 	CU_ASSERT(gdi_EqualRgn(rgn1, rgn2) == 1);
+
+	gdi_DeleteObject((HGDIOBJECT)bmp);
+	gdi_DeleteObject((HGDIOBJECT)rgn1);
+	gdi_DeleteObject((HGDIOBJECT)rgn2);
+	gdi_DeleteDC(hdc);
 }
 
 void test_gdi_InvalidateRegion(void)
@@ -2988,4 +3093,9 @@ void test_gdi_InvalidateRegion(void)
 
 	gdi_InvalidateRegion(hdc, rgn1->x, rgn1->y, rgn1->w, rgn1->h);
 	CU_ASSERT(gdi_EqualRgn(invalid, rgn2) == 1);
+
+	gdi_DeleteObject((HGDIOBJECT)bmp);
+	gdi_DeleteObject((HGDIOBJECT)rgn1);
+	gdi_DeleteObject((HGDIOBJECT)rgn2);
+	gdi_DeleteDC(hdc);
 }

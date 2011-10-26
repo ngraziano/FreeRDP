@@ -110,4 +110,8 @@ void test_mcs_write_connect_initial(void)
 	mcs_write_connect_initial(s, mcs, user_data);
 
 	ASSERT_STREAM(s, (uint8*) mcs_connect_initial_expected, sizeof(mcs_connect_initial_expected));
+
+	stream_free(s);
+	xfree(user_data);
+	mcs_free(mcs);
 }

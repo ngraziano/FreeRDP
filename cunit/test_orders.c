@@ -29,7 +29,7 @@ ORDER_INFO* orderInfo;
 
 int init_orders_suite(void)
 {
-	orderInfo = (ORDER_INFO*) malloc(sizeof(orderInfo));
+	orderInfo = (ORDER_INFO*) malloc(sizeof(ORDER_INFO));
 	return 0;
 }
 
@@ -92,6 +92,8 @@ void test_read_dstblt_order(void)
 	CU_ASSERT(dstblt.bRop == 0);
 
 	CU_ASSERT(stream_get_length(s) == (sizeof(dstblt_order) - 1));
+
+	xfree(s);
 }
 
 uint8 patblt_order[] = "\x1a\x00\xc3\x01\x0d\x00\x0d\x00\xf0\xff\xff\x00\x5b\xef\x00\x81";
@@ -122,6 +124,8 @@ void test_read_patblt_order(void)
 	CU_ASSERT(patblt.brush.style == (BMF_1BPP | CACHED_BRUSH));
 
 	CU_ASSERT(stream_get_length(s) == (sizeof(patblt_order) - 1));
+
+	xfree(s);
 }
 
 uint8 scrblt_order[] = "\x07\x00\xa1\x01\xf1\x00\xcc\x2f\x01\x8e\x00";
@@ -149,6 +153,8 @@ void test_read_scrblt_order(void)
 	CU_ASSERT(scrblt.nYSrc == 142);
 
 	CU_ASSERT(stream_get_length(s) == (sizeof(scrblt_order) - 1));
+
+	xfree(s);
 }
 
 uint8 opaque_rect_order[] = "\x00\x04\x00\x03\x73\x02\x06";
@@ -174,6 +180,8 @@ void test_read_opaque_rect_order(void)
 	CU_ASSERT(opaque_rect.color == 0x00060273);
 
 	CU_ASSERT(stream_get_length(s) == (sizeof(opaque_rect_order) - 1));
+
+	xfree(s);
 }
 
 uint8 draw_nine_grid_order[] = "\xfb\xf9\x0d\x00";
@@ -203,6 +211,8 @@ void test_read_draw_nine_grid_order(void)
 	CU_ASSERT(draw_nine_grid.bitmapId == 13);
 
 	CU_ASSERT(stream_get_length(s) == (sizeof(draw_nine_grid_order) - 1));
+
+	xfree(s);
 }
 
 
@@ -254,6 +264,8 @@ void test_read_multi_opaque_rect_order(void)
 	CU_ASSERT(multi_opaque_rect.rectangles[4].height == 1);
 
 	CU_ASSERT(stream_get_length(s) == (sizeof(multi_opaque_rect_order) - 1));
+
+	xfree(s);
 }
 
 uint8 line_to_order[] = "\x03\xb1\x0e\xa6\x5b\xef\x00";
@@ -289,6 +301,8 @@ void test_read_line_to_order(void)
 	CU_ASSERT(line_to.penColor == 0x00EF5B);
 
 	CU_ASSERT(stream_get_length(s) == (sizeof(line_to_order) - 1));
+
+	xfree(s);
 }
 
 uint8 polyline_order[] =
@@ -444,6 +458,8 @@ void test_read_glyph_index_order(void)
 	CU_ASSERT(glyph_index.y == 377);
 
 	CU_ASSERT(stream_get_length(s) == (sizeof(glyph_index_order_2) - 1));
+
+	xfree(s);
 }
 
 uint8 fast_index_order[] =
@@ -481,6 +497,8 @@ void test_read_fast_index_order(void)
 	CU_ASSERT(fast_index.y == 124);
 
 	CU_ASSERT(stream_get_length(s) == (sizeof(fast_index_order) - 1));
+
+	xfree(s);
 }
 
 uint8 fast_glyph_order[] =
@@ -517,6 +535,8 @@ void test_read_fast_glyph_order(void)
 	CU_ASSERT(fast_glyph.y == 187);
 
 	CU_ASSERT(stream_get_length(s) == (sizeof(fast_glyph_order) - 1));
+
+	xfree(s);
 }
 
 uint8 polygon_cb_order[] =
@@ -551,6 +571,8 @@ void test_read_polygon_cb_order(void)
 	CU_ASSERT(polygon_cb.cbData == 5);
 
 	CU_ASSERT(stream_get_length(s) == (sizeof(polygon_cb_order) - 1));
+
+	xfree(s);
 }
 
 uint8 cache_bitmap_order[] = "\x00\x00\x10\x01\x08\x01\x00\x00\x00\x10";
@@ -577,6 +599,8 @@ void test_read_cache_bitmap_order(void)
 	CU_ASSERT(cache_bitmap.cacheIndex == 0);
 
 	CU_ASSERT(stream_get_length(s) == (sizeof(cache_bitmap_order) - 1));
+
+	xfree(s);
 }
 
 uint8 cache_bitmap_v2_order[] =
@@ -619,6 +643,8 @@ void test_read_cache_bitmap_v2_order(void)
 	CU_ASSERT(cache_bitmap_v2.cacheIndex == 32767);
 
 	CU_ASSERT(stream_get_length(s) == (sizeof(cache_bitmap_v2_order) - 1));
+
+	xfree(s);
 }
 
 uint8 cache_bitmap_v3_order[] =
@@ -653,6 +679,8 @@ void test_read_cache_bitmap_v3_order(void)
 	CU_ASSERT(cache_bitmap_v3.bitmapData.length == 40);
 
 	CU_ASSERT(stream_get_length(s) == (sizeof(cache_bitmap_v3_order) - 1));
+
+	xfree(s);
 }
 
 uint8 cache_brush_order[] = "\x00\x01\x08\x08\x81\x08\xaa\x55\xaa\x55\xaa\x55\xaa\x55";
@@ -677,6 +705,8 @@ void test_read_cache_brush_order(void)
 	CU_ASSERT(cache_brush.length == 8);
 
 	CU_ASSERT(stream_get_length(s) == (sizeof(cache_brush_order) - 1));
+
+	xfree(s);
 }
 
 uint8 create_offscreen_bitmap_order[] = "\x00\x80\x60\x01\x10\x00\x01\x00\x02\x00";
@@ -699,6 +729,9 @@ void test_read_create_offscreen_bitmap_order(void)
 	CU_ASSERT(create_offscreen_bitmap.deleteList.cIndices == 1);
 
 	CU_ASSERT(stream_get_length(s) == (sizeof(create_offscreen_bitmap_order) - 1));
+
+
+	xfree(s);
 }
 
 uint8 switch_surface_order[] = "\xff\xff";
@@ -718,6 +751,8 @@ void test_read_switch_surface_order(void)
 	CU_ASSERT(switch_surface.bitmapId == 0xFFFF);
 
 	CU_ASSERT(stream_get_length(s) == (sizeof(switch_surface_order) - 1));
+
+	xfree(s);
 }
 
 int opaque_rect_count;
@@ -783,5 +818,8 @@ void test_update_recv_orders(void)
 	update_recv(update, s);
 
 	CU_ASSERT(patblt_count == 3);
+
+	update_free(update);
+	xfree(s);
 }
 

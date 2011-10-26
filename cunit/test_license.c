@@ -374,6 +374,8 @@ void test_license(void)
 	s->data = server_platform_challenge;
 	s->p = s->data + LICENSE_PREAMBLE_LENGTH;
 	license_read_platform_challenge_packet(license, s);
+
+	xfree(s);
 }
 
 uint8 test_client_random[32] =
@@ -453,6 +455,8 @@ void test_license_generate_keys(void)
 	s->data = license->encrypted_premaster_secret->data;
 	s->p = s->data + sizeof(test_encrypted_premaster_secret);
 	ASSERT_STREAM(s, test_encrypted_premaster_secret, sizeof(test_encrypted_premaster_secret));
+
+	xfree(s);
 }
 
 void test_license_encrypt_premaster_secret(void)
@@ -468,6 +472,7 @@ void test_license_encrypt_premaster_secret(void)
 	s->data = license->encrypted_premaster_secret->data;
 	s->p = s->data + sizeof(test_encrypted_premaster_secret);
 	ASSERT_STREAM(s, test_encrypted_premaster_secret, sizeof(test_encrypted_premaster_secret));
+	xfree(s);
 }
 
 uint8 test_encrypted_platform_challenge[10] =
@@ -497,4 +502,5 @@ void test_license_decrypt_platform_challenge(void)
 	s->data = license->platform_challenge->data;
 	s->p = s->data + sizeof(test_platform_challenge);
 	ASSERT_STREAM(s, test_platform_challenge, sizeof(test_platform_challenge));
+	xfree(s);
 }

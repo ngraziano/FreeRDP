@@ -51,6 +51,7 @@ void test_per_write_length(void)
 	STREAM* s = stream_new(2);
 	per_write_length(s, 298);
 	ASSERT_STREAM(s, (uint8*) per_length_expected, sizeof(per_length_expected));
+	stream_free(s);
 }
 
 uint8 per_oid[6] = { 0, 0, 20, 124, 0, 1 };
@@ -61,4 +62,5 @@ void test_per_write_object_identifier(void)
 	STREAM* s = stream_new(6);
 	per_write_object_identifier(s, per_oid);
 	ASSERT_STREAM(s, (uint8*) per_oid_expected, sizeof(per_oid_expected));
+	stream_free(s);
 }
