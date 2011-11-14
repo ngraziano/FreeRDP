@@ -145,7 +145,7 @@ uint32 freerdp_color_convert_rgb(uint32 srcColor, int srcBpp, int dstBpp, HCLRCO
 			}
 			else
 			{
-				dstColor = RGB16(red, green, blue);
+				dstColor = BGR16(red, green, blue);
 			}
 			break;
 		case 15:
@@ -311,7 +311,7 @@ uint8* freerdp_image_convert_8bpp(uint8* srcData, uint8* dstData, int width, int
 			red = clrconv->palette->entries[pixel].red;
 			green = clrconv->palette->entries[pixel].green;
 			blue = clrconv->palette->entries[pixel].blue;
-			pixel = RGB16(red, green, blue);
+			pixel = BGR16(red, green, blue);
 			*dst16 = pixel;
 			dst16++;
 		}
